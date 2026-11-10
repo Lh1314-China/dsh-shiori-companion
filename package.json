@@ -25,7 +25,8 @@
     "MODEL_BUILD.md",
     "LICENSE",
     "THIRD_PARTY_NOTICES.md",
-    "AUTHORS.md"
+    "AUTHORS.md",
+    "DISCLAIMER.md"
   ],
   "dsh": {
     "manifestVersion": 1,

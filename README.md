@@ -7,6 +7,16 @@ It adds a left-sidebar memory panel, scoped edits for L0–L3, and optional dept
 modules on top of an installed `dsh-shiori`. It is not an official shiori
 release and does not bundle shiori.
 
+## 项目声明
+
+- **非盈利、全开源**：插件代码 MIT，公开源码，不收费，不提供付费版本。
+- **不包含 `dsh-shiori` 代码或记忆数据**；shiori 是独立第三方项目，按其自身
+  许可证使用。
+- **不包含模型权重**；官方 ONNX 由 GitHub Actions 或用户从 BAAI 的 MIT
+  权重构建，单独分发。
+- 本项目是独立社区项目，不代表 shiori / BAAI / Hugging Face / Xenova 官方。
+- 如权利人认为有误用，请开 issue；核查后会移除或替换。详见 `DISCLAIMER.md`。
+
 ## What it does
 
 - Sidebar **Memory Panel**: overview, spark cards, work cards, topics, timeline,
