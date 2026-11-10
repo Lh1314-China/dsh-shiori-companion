@@ -1,5 +1,18 @@
 # Install
 
+## Download
+
+From the latest GitHub release:
+
+```powershell
+$base = "https://github.com/Lh1314-China/dsh-shiori-companion/releases/latest/download"
+Invoke-WebRequest "$base/install.ps1" -OutFile install.ps1
+Invoke-WebRequest "$base/dsh-shiori-companion-0.1.0.tgz" -OutFile dsh-shiori-companion-0.1.0.tgz
+Invoke-WebRequest "$base/dsh-shiori-companion-bge-small-official-0.1.0.tgz" -OutFile dsh-shiori-companion-bge-small-official-0.1.0.tgz
+```
+
+The model download is optional.
+
 ## One-click from a release folder
 
 Download the release, keep these files together:
