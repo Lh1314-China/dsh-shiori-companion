@@ -1,0 +1,62 @@
+{
+  "name": "dsh-shiori-companion",
+  "version": "0.1.0",
+  "private": true,
+  "description": "An independent companion plugin for dsh-shiori: memory panel, scoped edits, and optional depth modules.",
+  "type": "module",
+  "main": "./index.js",
+  "icon": "./icon.svg",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "lib",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "README.md",
+    "INSTALL.md",
+    "MODEL_BUILD.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md",
+    "AUTHORS.md"
+  ],
+  "dsh": {
+    "manifestVersion": 1,
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": []
+    },
+    "compatibility": {
+      "dsh": ">=0.2.1-rc.2 <0.4.0",
+      "node": ">=20",
+      "profiles": [
+        "desktop",
+        "web"
+      ]
+    }
+  },
+  "engines": {
+    "node": ">=20",
+    "dsh": ">=0.2.1-rc.2 <0.4.0"
+  },
+  "license": "MIT",
+  "author": "凌寒和小鱼",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "shiori",
+    "memory",
+    "companion"
+  ]
+}

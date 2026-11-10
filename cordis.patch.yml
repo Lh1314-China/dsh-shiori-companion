@@ -1,0 +1,7 @@
+# dsh-shiori-companion bundle patch.
+# One Host row: data contract reader + work cards + feature switches + JSON API.
+# The Client half adds the sidebar icon and the main panel.
+- insert:
+    - id: shiori-companion
+      name: 'dsh-shiori-companion'
+      config: {}

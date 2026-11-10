@@ -1,0 +1,113 @@
+name: Build official BGE ONNX model
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-model:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install conversion tools
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install "transformers>=4.40" "optimum[exporters]>=1.18" onnx huggingface_hub
+
+      - name: Export official BAAI weights to ONNX
+        run: |
+          optimum-cli export onnx \
+            --model BAAI/bge-small-zh-v1.5 \
+            --task feature-extraction \
+            --opset 14 \
+            official-onnx
+
+      - name: Arrange Transformers.js layout
+        run: |
+          mkdir -p models/Xenova/bge-small-zh-v1.5/onnx
+          if [ -f official-onnx/onnx/model.onnx ]; then
+            cp official-onnx/onnx/model.onnx models/Xenova/bge-small-zh-v1.5/onnx/model.onnx
+          elif [ -f official-onnx/model.onnx ]; then
+            cp official-onnx/model.onnx models/Xenova/bge-small-zh-v1.5/onnx/model.onnx
+          else
+            find official-onnx -maxdepth 3 -type f -print
+            exit 1
+          fi
+          for f in config.json tokenizer.json tokenizer_config.json special_tokens_map.json vocab.txt; do
+            if [ -f "official-onnx/$f" ]; then cp "official-onnx/$f" "models/Xenova/bge-small-zh-v1.5/$f"; fi
+          done
+          cat > models/Xenova/bge-small-zh-v1.5/LICENSE <<'EOF'
+          MIT License
+
+          Copyright (c) 2023 Beijing Academy of Artificial Intelligence (BAAI)
+
+          Permission is hereby granted, free of charge, to any person obtaining a copy
+          of this software and associated documentation files (the "Software"), to deal
+          in the Software without restriction, including without limitation the rights
+          to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+          copies of the Software, and to permit persons to whom the Software is
+          furnished to do so, subject to the following conditions:
+
+          The above copyright notice and this permission notice shall be included in all
+          copies or substantial portions of the Software.
+
+          THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+          IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+          FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+          AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+          LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+          OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+          SOFTWARE.
+          EOF
+          cat > models/Xenova/bge-small-zh-v1.5/MODEL-NOTICE.md <<'EOF'
+          # BAAI/bge-small-zh-v1.5
+
+          Official weights: https://huggingface.co/BAAI/bge-small-zh-v1.5
+          License: MIT (model card metadata).
+          This ONNX export was built from the official BAAI weights in GitHub Actions.
+          Keep this notice and the MIT license with redistributed copies.
+          EOF
+
+      - name: Pack model
+        run: |
+          tar -czf dsh-shiori-companion-bge-small-official-0.1.0.tgz models
+          sha256sum dsh-shiori-companion-bge-small-official-0.1.0.tgz > SHA256SUMS-model.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Pack plugin
+        run: |
+          npm pack
+          sha256sum dsh-shiori-companion-bge-small-official-0.1.0.tgz dsh-shiori-companion-0.1.0.tgz > SHA256SUMS-release.txt
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bge-small-official-onnx
+          path: |
+            dsh-shiori-companion-bge-small-official-0.1.0.tgz
+            dsh-shiori-companion-0.1.0.tgz
+            SHA256SUMS-release.txt
+
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dsh-shiori-companion-0.1.0.tgz
+            dsh-shiori-companion-bge-small-official-0.1.0.tgz
+            SHA256SUMS-release.txt
+

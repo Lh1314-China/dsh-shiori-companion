@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Memory board",
+    "description": "Browse L0–L3, switch scopes, read the timeline, manage work cards and 18 memory switches. Reads shiori data; writes only under stateRoot/plus."
+  }
+}
