@@ -44,22 +44,17 @@ release and does not bundle shiori.
 
 ## Install
 
+From a release folder:
+
 ```powershell
-dsh plugin --profile <profile> add dsh-shiori-companion-0.1.0.tgz
+powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 `
+  -Profile desktop `
+  -DataRoot "<shiori dataRoot>" `
+  -StateRoot "<shiori stateRoot>" `
+  -ModelPath ".\dsh-shiori-companion-bge-small-official-0.1.0.tgz"
 ```
 
-Then point the plugin at the same shiori roots:
-
-```yaml
-- id: shiori-companion
-  name: dsh-shiori-companion
-  config:
-    dataRoot: '<shiori dataRoot>'
-    stateRoot: '<shiori stateRoot>'
-    scope: global
-```
-
-See `INSTALL.md` for details and rollback.
+Omit `-ModelPath` for a model-free install. See `INSTALL.md` for manual steps.
 
 ## Model
 

@@ -1,5 +1,30 @@
 # Install
 
+## One-click from a release folder
+
+Download the release, keep these files together:
+
+```text
+install.ps1
+dsh-shiori-companion-0.1.0.tgz
+dsh-shiori-companion-bge-small-official-0.1.0.tgz   (optional)
+```
+
+Then run:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 `
+  -Profile desktop `
+  -DataRoot "<shiori dataRoot>" `
+  -StateRoot "<shiori stateRoot>" `
+  -ModelPath ".\dsh-shiori-companion-bge-small-official-0.1.0.tgz"
+```
+
+If you do not want the optional vector model, omit `-ModelPath`; the plugin
+still works with FTS5 + BM25.
+
+## Manual install
+
 ## 1. Back up the profile
 
 ```powershell
